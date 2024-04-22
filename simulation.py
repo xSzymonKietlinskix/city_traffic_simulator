@@ -1,8 +1,10 @@
 import pygame
 import time
+import info_screen
+
+
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-WIDTH = 1920
 
 def show_city(city, start, end, current, screen, cell_size, droga_img, blokada_img, car_img, meta_img, start_img, L):
     screen.fill(BLACK)
@@ -30,19 +32,27 @@ def show_city(city, start, end, current, screen, cell_size, droga_img, blokada_i
 
     pygame.display.flip()
 
-def simulate(path, L, city, start, end, t):
+def simulate(path, L, city, start, end, t, file_name):
     pygame.init()
+    info = pygame.display.Info()
+    screen_width = info.current_w
+    screen_h = info.current_h
+
+    global WIDTH
+    WIDTH = screen_width
 
     cell_size = WIDTH / (3 * L)
-    window_size = (L * cell_size, L * cell_size)
+    w = L * cell_size
+    h = L * cell_size
+    window_size = (w, h)
     screen = pygame.display.set_mode(window_size)
     pygame.display.set_caption("Symulator Przejazdu Pojazdu")
 
-    droga_img = pygame.image.load("droga.png").convert_alpha()
-    blokada_img = pygame.image.load("blokada.png").convert_alpha()
-    car_img = pygame.image.load("car.png").convert_alpha()
-    meta_img = pygame.image.load("meta.png").convert_alpha()
-    start_img = pygame.image.load("start.png").convert_alpha()
+    droga_img = pygame.image.load("images/droga.png").convert_alpha()
+    blokada_img = pygame.image.load("images/blokada.png").convert_alpha()
+    car_img = pygame.image.load("images/car.png").convert_alpha()
+    meta_img = pygame.image.load("images/meta.png").convert_alpha()
+    start_img = pygame.image.load("images/start.png").convert_alpha()
     droga_img = pygame.transform.scale(droga_img, (cell_size, cell_size))
     blokada_img = pygame.transform.scale(blokada_img, (cell_size, cell_size))
     car_img = pygame.transform.scale(car_img, (cell_size, cell_size))
@@ -64,6 +74,10 @@ def simulate(path, L, city, start, end, t):
                 counter -= 1
                 show_city(city, start, end, p, screen, cell_size, droga_img, blokada_img, car_img, meta_img, start_img, L)
                 time.sleep(t)
+        else:
+            again = info_screen.info(file_name)
+            if again:
+                counter = len(path)
 
         pygame.display.update()
 

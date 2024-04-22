@@ -1,0 +1,7 @@
+0 31 True True
+0 25 False False
+0 32 True False
+0 30 False False
+1 32 True True
+1 26 True False
+2 26 True True
