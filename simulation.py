@@ -6,9 +6,8 @@ import info_screen
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-def show_city(city, start, end, current, screen, cell_size, droga_img, blokada_img, car_img, meta_img, start_img, L):
+def show_city(city, start, end, current, screen, cell_size, droga_img, blokada_img, car_img, meta_img, start_img, sciezka_img, L):
     screen.fill(BLACK)
-
 
     for i in range(L):
         for j in range(L):
@@ -16,12 +15,16 @@ def show_city(city, start, end, current, screen, cell_size, droga_img, blokada_i
                 screen.blit(start_img, (i * cell_size, j * cell_size))
             elif current[0] == i and current[1] == j:
                 screen.blit(car_img, (i * cell_size, j * cell_size))
+                city[i][j] = 3
             elif end[0] == i and end[1] == j:
                 screen.blit(meta_img, (i * cell_size, j * cell_size))
             elif city[i][j] == 0:
                 screen.blit(droga_img, (i * cell_size, j * cell_size))
             elif city[i][j] == 1:
                 screen.blit(blokada_img, (i * cell_size, j * cell_size))
+                screen.blit(droga_img, (i * cell_size, j * cell_size))
+            elif city[i][j] == 3:
+                screen.blit(sciezka_img, (i * cell_size, j * cell_size))
 
     for i in range(L):
         for j in range(L):
@@ -53,14 +56,16 @@ def simulate(path, L, city, start, end, t, file_name):
     car_img = pygame.image.load("images/car.png").convert_alpha()
     meta_img = pygame.image.load("images/meta.png").convert_alpha()
     start_img = pygame.image.load("images/start.png").convert_alpha()
+    sciezka_img = pygame.image.load("images/sciezka.png").convert_alpha()
     droga_img = pygame.transform.scale(droga_img, (cell_size, cell_size))
     blokada_img = pygame.transform.scale(blokada_img, (cell_size, cell_size))
     car_img = pygame.transform.scale(car_img, (cell_size, cell_size))
     meta_img = pygame.transform.scale(meta_img, (cell_size, cell_size))
     start_img = pygame.transform.scale(start_img, (cell_size, cell_size))
+    sciezka_img = pygame.transform.scale(sciezka_img, (cell_size, cell_size))
 
 
-    show_city(city, start, end, start, screen, cell_size, droga_img, blokada_img, car_img, meta_img, start_img, L)
+    show_city(city, start, end, start, screen, cell_size, droga_img, blokada_img, car_img, meta_img, start_img, sciezka_img, L)
     # time.sleep(1)
 
     counter = len(path)
@@ -72,7 +77,7 @@ def simulate(path, L, city, start, end, t, file_name):
         if counter > 0:
             for p in path:
                 counter -= 1
-                show_city(city, start, end, p, screen, cell_size, droga_img, blokada_img, car_img, meta_img, start_img, L)
+                show_city(city, start, end, p, screen, cell_size, droga_img, blokada_img, car_img, meta_img, start_img, sciezka_img, L)
                 time.sleep(t)
         else:
             again = info_screen.info(file_name)
